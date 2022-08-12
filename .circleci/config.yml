@@ -10,13 +10,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
-
-      - run:
-          name: Test with pytest
-          command: |
-            . venv/bin/activate
-            pytest
+           
+      
 
 workflows:
   version: 2
