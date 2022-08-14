@@ -1,20 +1,14 @@
 version: 2
 jobs:
   build:
+    working_directory: "~circleci/python:3.6.4"
     docker:
-      - image: cimg/python:3.10.2
+      - image: cimg/python:3.6.2
     steps:
       - checkout
-      - run:
-          name: Install pip packages
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-          
-            
-
-     
+      - run: python3 doc.py
+    
+         
 
   deploy:
     docker:
@@ -26,15 +20,21 @@ jobs:
       - run:
           name: Build and push to Docker Hub
           command: |
-            docker build -t $DOCKER_HUB_USER_ID/$IMAGE_NAME:latest .
-            echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER_ID" --password-stdin
-            docker push $DOCKER_HUB_USER_ID/$IMAGE_NAME:latest
+            docker build -t king .
+            echo "Greawa25$" | docker login -u "joseph25121" --password-stdin
+            docker tag king:latest joseph25121/zio:jill
+            docker push joseph25121/zio:latest
+
+  test:
+    working_directory: ~/circleci-python
+    docker:
+      - image: "circleci/python:3.6.4"
+    steps:
+      - checkout
+      - run:python3 mill.py
 
 workflows:
-  version: 2
   build-master:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
+      - deploy
